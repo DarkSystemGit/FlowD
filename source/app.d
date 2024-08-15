@@ -13,10 +13,11 @@ void main()
 		CloseWindow();
 	Text text=new Text;
 	text.load("Hi World");
+	text.setSize(100);
 	while (!WindowShouldClose()){
 		BeginDrawing();
 		ClearBackground(Colors.BLACK);
-		text.draw(0,0);
+		text.draw(100,100);
 		EndDrawing();
 	}
 }

@@ -1,6 +1,7 @@
 module text;
 import model;
 import std.format;
+import std.stdio;
 import std.string;
 import std.math.traits;
 import raylib;
@@ -13,7 +14,6 @@ class Text : GAsset
     string text;
     string name;
     raylib.Font font;
-    bool loaded = false;
     Vector2 origin = Vector2(0, 0);
     raylib.Color color = Colors.WHITE;
     string type = "Text";
@@ -28,7 +28,8 @@ class Text : GAsset
     void load(string text)
     {
         this.text = text;
-        this.font=GetFontDefault();
+        this.font = GetFontDefault();
+        writeln(this.font);
     }
 
     void setFont(Font font)
@@ -63,8 +64,8 @@ class Text : GAsset
 
     void draw(float x, float y)
     {
-        DrawTextPro(this.font, this.text.toStringz(), Vector2(x, y), this.origin, this.angle, this.size, 0, this
-                .color);
+        DrawTextPro(this.font, this.text.toStringz(), Vector2(x, y), this.origin, this.angle, this.size, this.size / this
+                .font.baseSize, this.color);
     }
 }
 
