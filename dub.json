@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"Dark System"
+	],
+	"copyright": "Copyright © 2024, Dark System",
+	"dependencies": {
+		"dray-macpatch": ">=5.0.0-r6 <5.1.0-0"
+	},
+	"description": "Flow.JS adapted for D",
+	"license": "MIT",
+	"name": "flowd"
+}
