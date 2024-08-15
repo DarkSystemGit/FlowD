@@ -12,7 +12,7 @@ void main()
 	scope (exit)
 		CloseWindow();
 	Text text=new Text;
-	text.load('Hi');
+	text.load("Hi World");
 	while (!WindowShouldClose()){
 		BeginDrawing();
 		ClearBackground(Colors.BLACK);

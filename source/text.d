@@ -12,7 +12,7 @@ class Text : GAsset
     float angle = 0;
     string text;
     string name;
-    raylib.Font font=GetFontDefault();
+    raylib.Font font;
     bool loaded = false;
     Vector2 origin = Vector2(0, 0);
     raylib.Color color = Colors.WHITE;
@@ -28,6 +28,7 @@ class Text : GAsset
     void load(string text)
     {
         this.text = text;
+        this.font=GetFontDefault();
     }
 
     void setFont(Font font)
