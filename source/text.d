@@ -9,12 +9,14 @@ import raymath;
 
 class Text : GAsset
 {
+    float width = 0;
+    float height = 0;
     float size = 10;
     float angle = 0;
     string text;
     string name;
     raylib.Font font;
-    Vector2 origin = Vector2(0, 0);
+    Vector2 origin;
     raylib.Color color = Colors.WHITE;
     string type = "Text";
     void load()
@@ -47,7 +49,7 @@ class Text : GAsset
         this.text = text;
     }
 
-    void rotate(int angle)
+    void rotate(float angle)
     {
         this.angle += angle;
     }
@@ -63,8 +65,15 @@ class Text : GAsset
     }
 
     void draw(float x, float y)
-    {
-        DrawTextPro(this.font, this.text.toStringz(), Vector2(x, y), this.origin, this.angle, this.size, this.size / this
+    {   
+        
+        Vector2 dims = MeasureTextEx(this.font, this.text.toStringz(), this.size, this.size / this.font.baseSize);
+        this.width=dims.x;
+        this.height=dims.y;
+        Vector2 origin=Vector2(this.width/2,this.height/2);
+        if ((!isNaN(this.origin.x)) && (!isNaN(this.origin.y)))
+            origin = this.origin;
+        DrawTextPro(this.font, this.text.toStringz(), Vector2(x, y), origin, this.angle, this.size, this.size / this
                 .font.baseSize, this.color);
     }
 }

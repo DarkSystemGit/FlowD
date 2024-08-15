@@ -14,10 +14,11 @@ void main()
 	Text text=new Text;
 	text.load("Hi World");
 	text.setSize(100);
+	//text.rotate(45);
 	while (!WindowShouldClose()){
 		BeginDrawing();
 		ClearBackground(Colors.BLACK);
-		text.draw(100,100);
+		text.draw(200,300);
 		EndDrawing();
 	}
 }
