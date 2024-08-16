@@ -71,9 +71,10 @@ class Text : GAsset
         this.width=dims.x;
         this.height=dims.y;
         Vector2 origin=Vector2(this.width/2,this.height/2);
+        writeln(dims);
         if ((!isNaN(this.origin.x)) && (!isNaN(this.origin.y)))
             origin = this.origin;
-        DrawTextPro(this.font, this.text.toStringz(), Vector2(x, y), origin, this.angle, this.size, this.size / this
+        DrawTextPro(this.font, this.text.toStringz(), Vector2(x+origin.x, y+origin.y), origin, this.angle, this.size, this.size / this
                 .font.baseSize, this.color);
     }
 }

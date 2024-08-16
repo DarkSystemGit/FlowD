@@ -49,7 +49,7 @@ class Texture : GAsset
         Rectangle dest = {
             x, y, this.data.width * this.iscale.x, this.data.height * this.iscale.y
         };
-        Vector2 origin = {this.data.width / 2, this.data.height / 2};
+        Vector2 origin = {this.data.width* this.iscale.x / 2, this.data.height* this.iscale.y / 2};
         if ((!isNaN(this.origin.x)) && (!isNaN(this.origin.y)))
             origin = this.origin;
         DrawTexturePro(this.data, src, dest, origin, this.angle, this.itint);
