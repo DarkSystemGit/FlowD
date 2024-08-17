@@ -7,7 +7,7 @@ import std.math.traits;
 import raylib;
 import raymath;
 
-class Text : GAsset
+class TextAsset : GAsset
 {
     float width = 0;
     float height = 0;
@@ -31,7 +31,6 @@ class Text : GAsset
     {
         this.text = text;
         this.font = GetFontDefault();
-        writeln(this.font);
     }
 
     void setFont(Font font)
@@ -71,7 +70,6 @@ class Text : GAsset
         this.width=dims.x;
         this.height=dims.y;
         Vector2 origin=Vector2(this.width/2,this.height/2);
-        writeln(dims);
         if ((!isNaN(this.origin.x)) && (!isNaN(this.origin.y)))
             origin = this.origin;
         DrawTextPro(this.font, this.text.toStringz(), Vector2(x+origin.x, y+origin.y), origin, this.angle, this.size, this.size / this

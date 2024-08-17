@@ -7,7 +7,7 @@ import std.math.traits;
 import raylib;
 import raymath;
 
-class Texture : GAsset
+class TextureAsset : GAsset
 {
     raylib.Texture2D data;
     int width;
