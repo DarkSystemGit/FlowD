@@ -9,7 +9,7 @@ void main()
 {
 	class PitchRise:AudioEffect{
 		void onFrame(AudioAsset audio){
-			audio.pitch+=0.001;
+			audio.volume+=0.1;
 		}
 	}
 	SetTargetFPS(60);

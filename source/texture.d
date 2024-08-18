@@ -17,7 +17,7 @@ class TextureAsset : GAsset
     bool loaded = false;
     Vector2 iscale = Vector2(1, 1);
     Vector2 origin;
-    raylib.Color itint = Colors.RAYWHITE;
+    raylib.Color itint = Colors.WHITE;
     string type = "Texture";
     void load(string path)
     {
