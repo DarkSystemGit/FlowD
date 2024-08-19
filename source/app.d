@@ -1,35 +1,37 @@
 import std.stdio;
 import std.format;
 import std.string;
-import audio;
+import tile;
 import raylib;
 import raymath;
 
 void main()
 {
-	class PitchRise:AudioEffect{
-		void onFrame(AudioAsset audio){
-			audio.volume+=0.1;
-		}
-	}
 	SetTargetFPS(60);
 	InitWindow(800, 640, "Flow.D");
 	InitAudioDevice();
+	TilemapLayer map=new TilemapLayer();
+	EngineTileset tileset=new EngineTileset();
+	tileset.load("source/worldtiles.png",16,16,1);
+	float[] tiles=new float[400];
+	for(int i=0;i<tiles.length;i++){
+		tiles[i]=1;
+	}
+	map.loadFromArray(tiles,40);
+	
 	scope (exit)
 	{
 		CloseAudioDevice();
 		CloseWindow();
 	}
-	AudioAsset audio = new AudioAsset();
-	audio.load("source/mario.wav");
-	PitchRise audioEffect=new PitchRise();
-	audio.addEffect(audioEffect);
-	audio.play();
 	while (!WindowShouldClose())
 	{
 		BeginDrawing();
 		ClearBackground(Colors.BLACK);
-		audio.onFrame();
+		DrawFPS(700,0);
+		map.x+=0.01;
+		map.y+=0.01;
+		map.drawMap(tileset);
 		EndDrawing();
 	}
 }

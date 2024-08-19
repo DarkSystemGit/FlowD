@@ -1,73 +1,104 @@
 module tile;
 import std.math;
-
+import std.string;
+import raylib;
 struct Tile
 {
-    int id = 0;
-    int x = 0;
-    int y = 0;
+    float id = 0;
+    float x = 0;
+    float y = 0;
     float angle = 0;
-    Color tint=Colors.WHITE;
+    Vector2 offset=Vector2(0,0);
+    Color tfloat = Colors.WHITE;
     Tileset tileset;
-    Tilemap map;
-    void draw(Tileset tileset, Tilemap map)
+    this(float id,float x,float y)
     {
-        this.tileset = tileset;
-        this.map = map;
-        tileset.drawTile(this.x, this.y, map, this.angle);
+        this.id=id;
+        this.x=x;
+        this.y=y;
+    }
+    void draw(Tileset tileset)
+    {       
+        this.tileset=tileset;
+        this.x+=offset.x;
+        this.y+=offset.y;
+        tileset.drawTile(this);
+        this.x-=offset.x;
+        this.y-=offset.y;
     }
 
-    void setId(int id)
+    void setId(float id)
     {
         this.id = id;
-        this.draw(this.tileset, this.map, this.angle);
+        this.draw( this.tileset);
     }
 
-    void setX(int x)
+    void setX(float x)
     {
         this.x = x;
-        this.draw(this.tileset, this.map, this.angle);
+        this.draw( this.tileset);
     }
 
-    void setY(int y)
+    void setY(float y)
     {
         this.y = y;
-        this.draw(this.tileset, this.map, this.angle);
+        this.draw( this.tileset);
     }
-    void setAngle(float angle){
-        this.angle=angle;
-        this.draw(this.tileset, this.map, this.angle);
+
+    void setAngle(float angle)
+    {
+        this.angle = angle;
+        this.draw(  this.tileset);
     }
-    void setTint(Color tint){
-        this.tint=tint;
-        this.draw(this.tileset, this.map, this.angle);
+
+    void setTfloat(Color tfloat)
+    {
+        this.tfloat = tfloat;
+        this.draw( this.tileset);
     }
 }
 
-class Tilemap
+class TilemapLayer
 {
-    float x;
-    float y;
-
-    void drawMap(float x, float y)
+    float x=0;
+    float y=0;
+    Tile[] tiles = new Tile[0];
+    void drawMap( Tileset tileset)
     {
+        foreach (ref Tile tile; tiles)
+        {
+            tile.offset=Vector2(this.x,this.y);
+            tile.draw(tileset);
+        }
+    }
 
+    void addTile(Tile tile)
+    {
+        this.tiles.length++;
+        this.tiles[this.tiles.length - 1] = tile;
+    }
+    void loadFromArray(float[] tiles,float width){
+        foreach (i,ref float tile; tiles){
+            this.tiles.length++;
+        this.tiles[this.tiles.length - 1] = Tile(tile,i%width,floor(i/width));
+        }
+        
     }
 }
 
 class EngineTileset : Tileset
 {
     Texture2D tileset;
-    int tilewidth;
-    int tileheight;
-    int spacing=0;
-    void load(string path, int tilewidth,
-        int tileheight,int tilespacing)
+    float tilewidth;
+    float tileheight;
+    float spacing = 0;
+    void load(string path, float tilewidth,
+        float tileheight, float tilespacing)
     {
         this.tileset = LoadTexture(path.toStringz());
         this.tilewidth = tilewidth;
         this.tileheight = tileheight;
-        this.spacing=tilespacing;
+        this.spacing = tilespacing;
     }
 
     void drawTile(Tile tile)
@@ -79,18 +110,20 @@ class EngineTileset : Tileset
             tilewidth,
             tileheight
         };
-        if(!(src.x==0||src.x==tileset.width))src.x+=spacing*(tile.id % ceil(tileset.width / tilewidth));
-        if(!(src.y==0||src.y==tileset.height))src.y+=spacing*floor(tile.id / ceil(tileset.width / tilewidth));
+        if (!(src.x == 0 || src.x == tileset.width))
+            src.x += spacing * (tile.id % ceil(tileset.width / tilewidth));
+        if (!(src.y == 0 || src.y == tileset.height))
+            src.y += spacing * floor(tile.id / ceil(tileset.width / tilewidth));
         Rectangle dest = {
-            tile.x*tilewidth,tile.y*tileheight,tilewidth,tileheight
+            tile.x * tilewidth, tile.y * tileheight, tilewidth, tileheight
         };
         Vector2 origin = {tilewidth / 2, tileheight / 2};
-        DrawTexturePro(this.tileset, src, dest, origin, tile.angle, tile.tint);
+        DrawTexturePro(this.tileset, src, dest, origin, tile.angle, tile.tfloat);
     }
 }
 
 interface Tileset
 {
-    void drawTile(int x, int y, Tilemap map, float angle);
-    void load(string path, ...);
+    void drawTile(Tile tile);
+    
 }
