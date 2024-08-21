@@ -4,7 +4,8 @@
 	],
 	"copyright": "Copyright © 2024, Dark System",
 	"dependencies": {
-		"dray-macpatch": ">=5.0.0-r6 <5.1.0-0"
+		"dray-macpatch": ">=5.0.0-r6 <5.1.0-0",
+		"dtiled": "~>0.3.4"
 	},
 	"description": "Flow.JS adapted for D",
 	"license": "MIT",

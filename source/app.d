@@ -10,14 +10,14 @@ void main()
 	SetTargetFPS(60);
 	InitWindow(800, 640, "Flow.D");
 	InitAudioDevice();
-	TilemapLayer map=new TilemapLayer();
+	Tilemap map=new Tilemap();
 	EngineTileset tileset=new EngineTileset();
 	tileset.load("source/worldtiles.png",16,16,1);
 	float[] tiles=new float[400];
 	for(int i=0;i<tiles.length;i++){
 		tiles[i]=1;
 	}
-	map.loadFromArray(tiles,40);
+	map.createLayer(tiles,40,tileset,1);
 	
 	scope (exit)
 	{
@@ -29,9 +29,7 @@ void main()
 		BeginDrawing();
 		ClearBackground(Colors.BLACK);
 		DrawFPS(700,0);
-		map.x+=0.01;
-		map.y+=0.01;
-		map.drawMap(tileset);
+		map.draw();
 		EndDrawing();
 	}
 }
