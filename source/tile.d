@@ -3,6 +3,7 @@ import std.math;
 import std.string;
 import raylib;
 import std.stdio;
+
 struct Tile
 {
     float id = 0;
@@ -11,7 +12,7 @@ struct Tile
     float angle = 0;
     Vector2 offset = Vector2(0, 0);
     Color tfloat = Colors.WHITE;
-    Tileset tileset;
+    Tilemap tilemap;
     this(float id, float x, float y)
     {
         this.id = id;
@@ -19,12 +20,12 @@ struct Tile
         this.y = y;
     }
 
-    void draw(Tileset tileset)
+    void draw(Tilemap tilemap)
     {
-        this.tileset = tileset;
+        this.tilemap = tilemap;
         this.x += offset.x;
         this.y += offset.y;
-        tileset.drawTile(this);
+        tilemap.drawTile(this);
         this.x -= offset.x;
         this.y -= offset.y;
     }
@@ -32,31 +33,31 @@ struct Tile
     void setId(float id)
     {
         this.id = id;
-        this.draw(this.tileset);
+        this.draw(this.tilemap);
     }
 
     void setX(float x)
     {
         this.x = x;
-        this.draw(this.tileset);
+        this.draw(this.tilemap);
     }
 
     void setY(float y)
     {
         this.y = y;
-        this.draw(this.tileset);
+        this.draw(this.tilemap);
     }
 
     void setAngle(float angle)
     {
         this.angle = angle;
-        this.draw(this.tileset);
+        this.draw(this.tilemap);
     }
 
     void setTfloat(Color tfloat)
     {
         this.tfloat = tfloat;
-        this.draw(this.tileset);
+        this.draw(this.tilemap);
     }
 }
 
@@ -65,12 +66,12 @@ class TilemapLayer
     float x = 0;
     float y = 0;
     Tile[] tiles = new Tile[0];
-    void drawMap(Tileset tileset)
+    void drawMap(Tilemap map)
     {
         foreach (ref Tile tile; tiles)
         {
             tile.offset = Vector2(this.x, this.y);
-            tile.draw(tileset);
+            tile.draw(map);
         }
     }
 
@@ -125,6 +126,9 @@ class EngineTileset : Tileset
         Vector2 origin = {tilewidth / 2, tileheight / 2};
         DrawTexturePro(this.tileset, src, dest, origin, tile.angle, tile.tfloat);
     }
+    float getHeighest(){
+        return (floor(tileset.width / (tilewidth+spacing))*floor(tileset.height / (tileheight+spacing)))-1;
+    }
 }
 
 class Tilemap
@@ -134,8 +138,8 @@ class Tilemap
     void addLayer(TilemapLayer layer, EngineTileset tileset, int z)
     {
         if (this.layers.length < z)
-            this.layers.length = z+1;
-        this.tilesets.length=this.layers.length;
+            this.layers.length = z + 1;
+        this.tilesets.length = this.layers.length;
         layers[z] = layer;
         tilesets[z] = tileset;
     }
@@ -146,10 +150,32 @@ class Tilemap
         layer.loadFromArray(tiles, width);
         this.addLayer(layer, tileset, z);
     }
-    void draw(){
-        foreach(i,ref TilemapLayer layer;this.layers){
-            if(layer!is null)
-            layer.drawMap(this.tilesets[i]);
+    void drawTile(Tile tile){
+        float previd=0;
+        int i=0;
+        EngineTileset tileset;
+        while(tileset is null){
+            if(!(tilesets.length>i))return;
+            if((previd<tile.id)&&(previd+tilesets[i].getHeighest()>tile.id)){
+                tileset=tilesets[i];
+            }
+            previd+=tilesets[i].getHeighest();
+            i++;
+        }
+        tileset.drawTile(tile);
+    }
+    void draw(float x,float y)
+    {
+        foreach (i, ref TilemapLayer layer; this.layers)
+        {
+            if (layer !is null)
+            {
+                layer.x += x;
+                layer.y += y;
+                layer.drawMap(this);
+                layer.x -= x;
+                layer.y -= y;
+            }
         }
     }
 }
