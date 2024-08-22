@@ -155,7 +155,8 @@ class Tilemap
         int i=0;
         EngineTileset tileset;
         while(tileset is null){
-            if(!(tilesets.length>i))return;
+            if(!tilesets.length>i)return;
+            if(!(tilesets[i] !is null)){i++;continue;}
             if((previd<tile.id)&&(previd+tilesets[i].getHeighest()>tile.id)){
                 tileset=tilesets[i];
             }
@@ -170,6 +171,7 @@ class Tilemap
         {
             if (layer !is null)
             {
+                
                 layer.x += x;
                 layer.y += y;
                 layer.drawMap(this);

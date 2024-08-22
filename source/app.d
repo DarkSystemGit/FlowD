@@ -14,7 +14,7 @@ void main()
 	EngineTileset tileset = new EngineTileset();
 	float p = 0;
 	tileset.load("source/worldtiles.png", 16, 16, 1);
-	float[] tiles = new float[100000];
+	float[] tiles = new float[4000];
 	for (int i = 0; i < tiles.length; i++)
 	{
 		tiles[i] = 1;
