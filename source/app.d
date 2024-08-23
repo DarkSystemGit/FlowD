@@ -4,23 +4,13 @@ import std.string;
 import tile;
 import raylib;
 import raymath;
-
+import tiled;
 void main()
 {
 	SetTargetFPS(60);
 	InitWindow(800, 640, "Flow.D");
 	InitAudioDevice();
-	Tilemap map = new Tilemap();
-	EngineTileset tileset = new EngineTileset();
-	float p = 0;
-	tileset.load("source/worldtiles.png", 16, 16, 1);
-	float[] tiles = new float[4000];
-	for (int i = 0; i < tiles.length; i++)
-	{
-		tiles[i] = 1;
-	}
-	map.createLayer(tiles, 40, tileset, 1);
-
+	tiled.loadMap("./test/map.tmx");
 	scope (exit)
 	{
 		CloseAudioDevice();
@@ -29,10 +19,8 @@ void main()
 	while (!WindowShouldClose())
 	{
 		BeginDrawing();
-		ClearBackground(Colors.BLACK);
-		p += .01;
+		ClearBackground(Colors.BLACK);	
 		DrawFPS(700, 0);
-		map.draw(p, p);
 		EndDrawing();
 	}
 }

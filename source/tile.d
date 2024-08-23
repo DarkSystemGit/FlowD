@@ -4,7 +4,8 @@ import std.string;
 import raylib;
 import std.stdio;
 
-struct Tile
+
+class Tile
 {
     float id = 0;
     float x = 0;
@@ -13,6 +14,7 @@ struct Tile
     Vector2 offset = Vector2(0, 0);
     Color tfloat = Colors.WHITE;
     Tilemap tilemap;
+    EngineTileset tileset;
     this(float id, float x, float y)
     {
         this.id = id;
@@ -86,7 +88,7 @@ class TilemapLayer
         foreach (i, ref float tile; tiles)
         {
             this.tiles.length++;
-            this.tiles[this.tiles.length - 1] = Tile(tile, i % width, floor(i / width));
+            this.tiles[this.tiles.length - 1] = new Tile(tile, i % width, floor(i / width));
         }
 
     }
@@ -126,8 +128,11 @@ class EngineTileset : Tileset
         Vector2 origin = {tilewidth / 2, tileheight / 2};
         DrawTexturePro(this.tileset, src, dest, origin, tile.angle, tile.tfloat);
     }
-    float getHeighest(){
-        return (floor(tileset.width / (tilewidth+spacing))*floor(tileset.height / (tileheight+spacing)))-1;
+
+    float getHeighest()
+    {
+        return (floor(tileset.width / (tilewidth + spacing)) * floor(
+                tileset.height / (tileheight + spacing))) - 1;
     }
 }
 
@@ -150,28 +155,42 @@ class Tilemap
         layer.loadFromArray(tiles, width);
         this.addLayer(layer, tileset, z);
     }
-    void drawTile(Tile tile){
-        float previd=0;
-        int i=0;
-        EngineTileset tileset;
-        while(tileset is null){
-            if(!tilesets.length>i)return;
-            if(!(tilesets[i] !is null)){i++;continue;}
-            if((previd<tile.id)&&(previd+tilesets[i].getHeighest()>tile.id)){
-                tileset=tilesets[i];
+
+    void drawTile(Tile tile)
+    {
+        float previd = 0;
+        int i = 0;
+        EngineTileset tileset = tile.tileset;
+        while (tileset is null)
+        {
+            if (!tilesets.length > i)
+                return;
+            if (!(tilesets[i]!is null))
+            {
+                i++;
+                continue;
             }
-            previd+=tilesets[i].getHeighest();
+            if ((previd < tile.id) && (previd + tilesets[i].getHeighest() > tile.id))
+            {
+                tileset = tilesets[i];
+            }
+            previd += tilesets[i].getHeighest();
             i++;
         }
+ 
+        tile.id -= previd;
+        tile.tileset = tileset;
+       tile.id += previd;
         tileset.drawTile(tile);
     }
-    void draw(float x,float y)
+
+    void draw(float x, float y)
     {
         foreach (i, ref TilemapLayer layer; this.layers)
         {
             if (layer !is null)
             {
-                
+
                 layer.x += x;
                 layer.y += y;
                 layer.drawMap(this);
