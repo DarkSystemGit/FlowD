@@ -41,7 +41,10 @@ typedef struct _tilelayerList
 tilesetList *convertTilesetList(tilesetList *block, tmx_tileset_list *tileset)
 {
     block->tileset = (tileset *)malloc(sizeof(tileset));
-    block->tileset->path;
+    block->tileset->path=tileset->tileset->image->source;
+    block->tileset->tilewidth = tileset->tileset->tile_width;
+    block->tileset->tileheight = tileset->tileset->tile_height;
+    block->tileset->spacing = tileset->tileset->spacing;
     block->next=convertTilesetList((tilesetList *)malloc(sizeof(tilesetList)),tileset->next);
 }
 tilelayerList *convertTilelayerList(tilelayerList *block, tmx_layer *layer)
