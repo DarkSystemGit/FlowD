@@ -10,5 +10,5 @@
 	"description": "Flow.JS adapted for D",
 	"license": "MIT",
 	"name": "flowd",
-	"sourceFiles":["./libs/tmx/src/tmx.c","./libs/tmx/src/tmx_xml.c","./libs/tmx/src/tmx_err.c","./libs/tmx/src/tmx_hash.c","./libs/tmx/src/tmx_mem.c","./libs/tmx/src/tmx_utils.c"],"libs": ["xml2","zlib"]
+	"sourceFiles":["./libs/tmx/src/tmx.c","./libs/tmx/src/tmx_xml.c","./libs/tmx/src/interop.c","./libs/tmx/src/tmx_err.c","./libs/tmx/src/tmx_hash.c","./libs/tmx/src/tmx_mem.c","./libs/tmx/src/tmx_utils.c"],"libs": ["xml2","zlib"]
 }
