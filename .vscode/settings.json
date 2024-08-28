@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "tmx.h": "c",
+        "unistd.h": "c"
+    }
+}

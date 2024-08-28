@@ -3,10 +3,14 @@
 	"versions": {
 		"ddmp": "0.0.1-0.dev.3",
 		"dray-macpatch": "5.0.0-r6",
+		"dshould": "1.7.2",
 		"dtiled": "0.3.4",
 		"fluent-asserts": "0.13.3",
 		"jsonizer": "0.7.7",
 		"libdparse": "0.14.0",
-		"stdx-allocator": "2.77.5"
+		"prettyprint": "1.0.9",
+		"stdx-allocator": "2.77.5",
+		"thepath": "1.2.0",
+		"unit-threaded": "2.2.0"
 	}
 }

@@ -155,7 +155,10 @@ class Tilemap
         layer.loadFromArray(tiles, width);
         this.addLayer(layer, tileset, z);
     }
-
+    void addTileset(EngineTileset tileset){
+        tilesets.length++;
+        tilesets[tilesets.length-1] = tileset;
+    }
     void drawTile(Tile tile)
     {
         float previd = 0;

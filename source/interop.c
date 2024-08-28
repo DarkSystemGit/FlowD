@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include "tmx.h"
+#include "./../libs/tmx/src/tmx.h"
 
 typedef struct _tileset
 {
@@ -23,9 +23,9 @@ typedef struct _tilemap
 typedef struct _tilelayer
 {
     char *name;
+    int *tiles;
     int width;
     int height;
-    int *tiles;
 } tilelayer;
 typedef struct _tilesetList
 {
@@ -38,25 +38,67 @@ typedef struct _tilelayerList
     struct _tilelayerList *next;
 } tilelayerList;
 
-tilesetList *convertTilesetList(tilesetList *block, tmx_tileset_list *tileset)
+tilesetList *convertTilesetList(tilesetList *block, tmx_tileset_list *ts)
 {
     block->tileset = (tileset *)malloc(sizeof(tileset));
-    block->tileset->path=tileset->tileset->image->source;
-    block->tileset->tilewidth = tileset->tileset->tile_width;
-    block->tileset->tileheight = tileset->tileset->tile_height;
-    block->tileset->spacing = tileset->tileset->spacing;
-    block->next=convertTilesetList((tilesetList *)malloc(sizeof(tilesetList)),tileset->next);
+    block->tileset->path = ts->tileset->image->source;
+    block->tileset->tilewidth = ts->tileset->tile_width;
+    block->tileset->tileheight = ts->tileset->tile_height;
+    block->tileset->spacing = ts->tileset->spacing;
+    block->tileset->margin = ts->tileset->margin;
+    if (ts->next != NULL)
+    {
+        block->next = convertTilesetList((tilesetList *)malloc(sizeof(tilesetList)), ts->next);
+    }
+    else
+    {
+        block->next = NULL;
+    }
+    return block;
 }
-tilelayerList *convertTilelayerList(tilelayerList *block, tmx_layer *layer)
+tilelayerList *convertTilelayerList(tilelayerList *block, tmx_layer *layer, int w, int h)
 {
+    block->tilelayer = (tilelayer *)malloc(sizeof(tilelayer));
+    block->tilelayer->name = layer->name;
+    block->tilelayer->width = w;
+    block->tilelayer->height = h;
+    block->tilelayer->tiles = (int *)malloc(sizeof(int) * (w * h));
+    if (layer->type == L_LAYER)
+    {
+        for (int i = 0; i < w * h; i++)
+        {
+            block->tilelayer->tiles[i] = layer->content.gids[i];
+        }
+    }
+    if (layer->next != NULL)
+    {
+        block->next = convertTilelayerList((tilelayerList *)malloc(sizeof(tilelayerList)), layer->next, w, h);
+    }
+    else
+    {
+        block->next = NULL;
+    }
+    return block;
 }
 tilemap convertMap(tmx_map *map)
 {
     tilemap tmap;
-    // Initialize tilesetlist and tilelayerlist
+
     tmap.tilesets = convertTilesetList((tilesetList *)malloc(sizeof(tilesetList)), map->ts_head);
-    tmap.layers = convertTilelayerList((tilelayerList *)malloc(sizeof(tilelayerList)), map->ly_head);
+
+    tmap.layers = convertTilelayerList((tilelayerList *)malloc(sizeof(tilelayerList)), map->ly_head, map->height, map->width);
+
     return tmap;
 };
-
-// void main() {};
+tilemap *loadMap(const char *path)
+{
+    tmx_map *map = tmx_load(path);
+    if (map == NULL)
+    {
+        printf("Error loading map");
+        exit(1);
+    }
+    tilemap *tmap = (tilemap *)malloc(sizeof(tilemap));
+    *tmap = convertMap(map);
+    return tmap;
+}
