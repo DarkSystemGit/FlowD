@@ -24,6 +24,7 @@ typedef struct _tilelayer
 {
     char *name;
     int *tiles;
+    int tilecount;
     int width;
     int height;
 } tilelayer;
@@ -63,11 +64,13 @@ tilelayerList *convertTilelayerList(tilelayerList *block, tmx_layer *layer, int 
     block->tilelayer->width = w;
     block->tilelayer->height = h;
     block->tilelayer->tiles = (int *)malloc(sizeof(int) * (w * h));
+    block->tilelayer->tilecount = w * h;
     if (layer->type == L_LAYER)
     {
         for (int i = 0; i < w * h; i++)
         {
             block->tilelayer->tiles[i] = layer->content.gids[i];
+
         }
     }
     if (layer->next != NULL)

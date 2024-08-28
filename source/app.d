@@ -8,18 +8,19 @@ import tiled;
 void main()
 {
 	SetTargetFPS(60);
-	InitWindow(800, 640, "Flow.D");
+	InitWindow(1000, 1000, "Flow.D");
 	InitAudioDevice();
-	tiled.loadMap("./test/map.tmx");
+	Tilemap map=tiled.loadMap("./test/map.tmx");
 	scope (exit)
 	{
 		CloseAudioDevice();
 		CloseWindow();
-	}
+	} 
 	while (!WindowShouldClose())
 	{
 		BeginDrawing();
-		ClearBackground(Colors.BLACK);	
+		ClearBackground(Colors.BLACK);
+		map.draw(0,0);	
 		DrawFPS(700, 0);
 		EndDrawing();
 	}

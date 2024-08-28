@@ -11,6 +11,8 @@ class Tile
     float x = 0;
     float y = 0;
     float angle = 0;
+    int horizFlip = 0;
+    int vertFlip = 0;
     Vector2 offset = Vector2(0, 0);
     Color tfloat = Colors.WHITE;
     Tilemap tilemap;
@@ -115,8 +117,8 @@ class EngineTileset : Tileset
         Rectangle src = {
             (tile.id % ceil(tileset.width / tilewidth)) * tilewidth,
             floor(tile.id / ceil(tileset.width / tilewidth)) * tileheight,
-            tilewidth,
-            tileheight
+            tilewidth*(-1*tile.horizFlip),
+            tileheight*(-1*tile.vertFlip)
         };
         if (!(src.x == 0 || src.x == tileset.width))
             src.x += spacing * (tile.id % ceil(tileset.width / tilewidth));
@@ -166,7 +168,7 @@ class Tilemap
         EngineTileset tileset = tile.tileset;
         while (tileset is null)
         {
-            if (!tilesets.length > i)
+            if (!(tilesets.length > i))
                 return;
             if (!(tilesets[i]!is null))
             {
